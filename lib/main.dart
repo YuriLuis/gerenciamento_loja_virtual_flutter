@@ -1,3 +1,4 @@
+import 'package:admin_loja_virtual/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -11,9 +12,7 @@ class MyApp extends StatelessWidget {
         primaryColor:  Color.fromRGBO(255, 199, 44,1.0)
       ),
       debugShowCheckedModeBanner: false,
-      home: Container(
-        color: Theme.of(context).primaryColor,
-      ),
+      home: LoginScreen(),
     );
   }
 }
