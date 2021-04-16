@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:admin_loja_virtual/validators/login_validators.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -16,6 +19,8 @@ class LoginBloc extends BlocBase with LoginValidators {
   Stream<String> get outPassword =>
       _passwordController.stream.transform(validatePassword);
 
+  StreamSubscription _streamSubscription;
+
   Stream<LoginState> get outState => _stateController.stream;
 
   Stream<bool> get outSubmitValid =>
@@ -28,11 +33,16 @@ class LoginBloc extends BlocBase with LoginValidators {
 
   Function(String) get changePassword => _passwordController.sink.add;
 
-  LoginBloc(){
-    FirebaseAuth.instance.onAuthStateChanged.listen((user) {
-      if(user != null){
-
-      }else {
+  LoginBloc() {
+    _streamSubscription = FirebaseAuth.instance.onAuthStateChanged.listen((user) async {
+      if (user != null) {
+        if(await verifyPrivileges(user)){
+          _stateController.add(LoginState.SUCESS);
+        }else {
+          FirebaseAuth.instance.signOut();
+          _stateController.add(LoginState.FAIL);
+        }
+      } else {
         _stateController.add(LoginState.IDLE);
       }
     });
@@ -45,8 +55,25 @@ class LoginBloc extends BlocBase with LoginValidators {
 
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-    .catchError((e){
+        .catchError((e) {
       _stateController.add(LoginState.FAIL);
+    });
+    //FirebaseAuth.instance.signOut();
+  }
+
+  Future<bool> verifyPrivileges(FirebaseUser user) async {
+    return await Firestore.instance
+        .collection('admins')
+        .document(user.uid)
+        .get()
+        .then((doc) {
+      if (doc.data != null) {
+        return true;
+      } else {
+        return false;
+      }
+    }).catchError((e) {
+      return false;
     });
   }
 
@@ -55,5 +82,6 @@ class LoginBloc extends BlocBase with LoginValidators {
     _emailController.close();
     _passwordController.close();
     _stateController.close();
+    _streamSubscription.cancel();
   }
 }
