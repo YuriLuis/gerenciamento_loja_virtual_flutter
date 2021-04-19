@@ -62,7 +62,7 @@ class UserBloc extends BlocBase {
       }
 
       _users[uid]
-          .addAll({'money ': money.toStringAsFixed(2), 'orders': numOrders});
+          .addAll({'money': money.toStringAsFixed(2), 'orders': numOrders});
 
       _usersController.add(_users.values.toList());
     });

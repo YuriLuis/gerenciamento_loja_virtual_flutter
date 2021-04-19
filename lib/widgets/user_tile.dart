@@ -7,7 +7,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (user.containsKey("money ")) {
+    if (user.containsKey('money')) {
       return ListTile(
         title: Text(
           user['name'],
@@ -22,7 +22,7 @@ class UserTile extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             Text(
-              'Gasto R\$: ${user['money '].toStringAsFixed(2)}',
+              'Gasto R\$: ${user['money']}',
               style: TextStyle(color: Colors.white),
             )
           ],
