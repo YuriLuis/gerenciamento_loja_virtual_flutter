@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserBloc extends BlocBase {
-  final _usersController = BehaviorSubject();
+  final _usersController = BehaviorSubject<List>();
 
   Map<String, Map<String, dynamic>> _users = {};
 
   Firestore _firestore = Firestore.instance;
+
+  Stream<List> get outUsers => _usersController.stream;
 
   UserBloc() {
     _addUsersListiner();
@@ -59,17 +61,14 @@ class UserBloc extends BlocBase {
         money += order.data['total'];
       }
 
-      _users[uid].addAll({
-        ''
-            'money ': money,
-        'orders': numOrders
-      });
+      _users[uid]
+          .addAll({'money ': money.toStringAsFixed(2), 'orders': numOrders});
 
       _usersController.add(_users.values.toList());
     });
   }
 
-  void _unsubscriveToOrders(String uid){
+  void _unsubscriveToOrders(String uid) {
     _users[uid]['subscription'].cancel();
   }
 }

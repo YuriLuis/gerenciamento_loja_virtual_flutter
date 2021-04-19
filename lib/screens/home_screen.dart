@@ -1,4 +1,7 @@
+import 'package:admin_loja_virtual/blocs/user_bloc.dart';
 import 'package:admin_loja_virtual/tabs/users_tab.dart';
+import 'package:bloc_pattern/bloc_pattern.dart';
+
 /// Flutter code sample for BottomNavigationBar
 
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
@@ -38,6 +41,8 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+
+  UserBloc _userBloc;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -51,6 +56,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     ),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _userBloc = UserBloc();
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -62,12 +73,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(45, 42, 38, 1.0),
       body: SafeArea(
-        child:Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ) ,
+        child: BlocProvider<UserBloc>(
+          bloc: _userBloc,
+          child: Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromRGBO(255, 199, 44,1.0),
+        backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
