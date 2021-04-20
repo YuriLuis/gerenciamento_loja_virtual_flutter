@@ -13,7 +13,9 @@ class CategoryTile extends StatelessWidget {
       child: Card(
         child: ExpansionTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(category.data['icon'],),
+            backgroundImage: NetworkImage(
+              category.data['icon'],
+            ),
             backgroundColor: Colors.transparent,
           ),
           title: Text(
@@ -21,6 +23,39 @@ class CategoryTile extends StatelessWidget {
             style:
                 TextStyle(color: Colors.grey[850], fontWeight: FontWeight.w500),
           ),
+          children: [
+            FutureBuilder<QuerySnapshot>(
+              future: category.reference.collection('itens').getDocuments(),
+              builder: (context, snapshot) => !snapshot.hasData
+                  ? Container()
+                  : Column(
+                      children: snapshot.data.documents.map((e){
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(e.data['images'][0]),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          title: Text(e.data['title']),
+                          trailing: Text('R\$${e.data['price'].toStringAsFixed(2)}'),
+                          onTap: (){
+
+                          },
+                        );
+                      }).toList()..add(
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(Icons.add, color: Color.fromRGBO(255, 199, 44,1.0),),
+                          ),
+                          title: Text('Adicionar'),
+                          onTap: (){
+
+                          },
+                        )
+                      ),
+                    ),
+            )
+          ],
         ),
       ),
     );
