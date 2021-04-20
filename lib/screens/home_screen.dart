@@ -14,6 +14,7 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 // and displays a corresponding message in the center of the [Scaffold].
 
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 void main() => runApp(const HomeScreen());
 
@@ -85,6 +86,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ),
         ),
       ),
+      floatingActionButton: _buildFloating(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
         items: const <BottomNavigationBarItem>[
@@ -106,5 +108,42 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  // ignore: missing_return
+  Widget _buildFloating() {
+    switch(_selectedIndex){
+      case 0:
+        return null;
+        break;
+      case 1:
+        return SpeedDial(
+          child: Icon(Icons.sort),
+          backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
+          overlayOpacity: 0.4,
+          overlayColor: Colors.black,
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.arrow_downward, color: Theme.of(context).primaryColor,),
+              backgroundColor: Colors.black,
+              label:  'Concluídos Abaixo',
+              labelStyle: TextStyle(fontSize: 14),
+              onTap: (){
+                _ordersBloc.setOrderCriteria(SortCriteria.READY_LAST);
+              }
+            ),
+            SpeedDialChild(
+                child: Icon(Icons.arrow_upward, color: Theme.of(context).primaryColor,),
+                backgroundColor: Colors.black,
+                label:  'Concluídos Acima',
+                labelStyle: TextStyle(fontSize: 14),
+                onTap: (){
+                  _ordersBloc.setOrderCriteria(SortCriteria.READY_FIRST);
+                }
+            )
+          ],
+        );
+        break;
+    }
   }
 }
