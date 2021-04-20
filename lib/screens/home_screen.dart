@@ -1,4 +1,5 @@
 import 'package:admin_loja_virtual/blocs/user_bloc.dart';
+import 'package:admin_loja_virtual/tabs/orders_tab.dart';
 import 'package:admin_loja_virtual/tabs/users_tab.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 
@@ -48,9 +49,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<Widget> _widgetOptions = <Widget>[
     UsersTab(),
-    Container(
-      color: Colors.yellow,
-    ),
+    OrdersTab(),
     Container(
       color: Colors.green,
     ),
