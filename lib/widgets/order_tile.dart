@@ -16,6 +16,8 @@ class OrderTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Card(
         child: ExpansionTile(
+          key: Key(order.documentID),
+          initiallyExpanded: order.data['status'] != 4,
           title: Text(
             '${order.documentID.substring(order.documentID.length - 7, order.documentID.length)} - '
                 '${states[order.data['status']]}',
@@ -27,7 +29,7 @@ class OrderTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  OrderHeader(),
+                  OrderHeader(order),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: order.data['products'].map<Widget>((p){
@@ -43,17 +45,25 @@ class OrderTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Firestore.instance.collection('users').document(order['clientId'])
+                          .collection('orders').document(order.documentID).delete();
+                          order.reference.delete();
+                        },
                         child: Text('Excluir'),
                         textColor: Colors.red,
                       ),
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: order.data['status'] > 1 ? (){
+                          order.reference.updateData({'status' : order.data['status'] -1 });
+                        } : null,
                         child: Text('Regredir'),
                         textColor: Colors.grey[850],
                       ),
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: order.data['status'] < 4 ? (){
+                          order.reference.updateData({'status' : order.data['status'] +1 });
+                        } : null,
                         child: Text('Avançar'),
                         textColor: Colors.green,
                       )

@@ -80,6 +80,10 @@ class UserBloc extends BlocBase {
     }
   }
 
+  Map<String, dynamic> getUser(String uid){
+    return _users[uid];
+  }
+
   // ignore: missing_return
   List<Map<String, dynamic>> _filter(String search) {
     List<Map<String, dynamic>> filterUsers = List.from(_users.values.toList());
