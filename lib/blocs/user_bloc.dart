@@ -71,4 +71,21 @@ class UserBloc extends BlocBase {
   void _unsubscriveToOrders(String uid) {
     _users[uid]['subscription'].cancel();
   }
+
+  void onChangeSearch(String search) {
+    if (search.trim().isEmpty) {
+      _usersController.add(_users.values.toList());
+    } else {
+      _usersController.add(_filter(search.trim()));
+    }
+  }
+
+  // ignore: missing_return
+  List<Map<String, dynamic>> _filter(String search) {
+    List<Map<String, dynamic>> filterUsers = List.from(_users.values.toList());
+    filterUsers.retainWhere((user){
+      return user['name'].toUpperCase().contains(search.toUpperCase());
+    });
+    return filterUsers;
+  }
 }

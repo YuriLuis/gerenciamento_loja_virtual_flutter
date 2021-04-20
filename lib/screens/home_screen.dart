@@ -19,7 +19,7 @@ void main() => runApp(const HomeScreen());
 class HomeScreen extends StatelessWidget {
   const HomeScreen({key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Gerenciamento Loja';
 
   @override
   Widget build(BuildContext context) {
