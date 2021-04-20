@@ -1,6 +1,7 @@
 import 'package:admin_loja_virtual/blocs/orders_bloc.dart';
 import 'package:admin_loja_virtual/blocs/user_bloc.dart';
 import 'package:admin_loja_virtual/tabs/orders_tab.dart';
+import 'package:admin_loja_virtual/tabs/product_tab.dart';
 import 'package:admin_loja_virtual/tabs/users_tab.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 
@@ -53,9 +54,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   List<Widget> _widgetOptions = <Widget>[
     UsersTab(),
     OrdersTab(),
-    Container(
-      color: Colors.green,
-    ),
+    ProdutctTab()
   ];
 
   @override
