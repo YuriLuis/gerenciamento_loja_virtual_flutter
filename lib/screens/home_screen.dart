@@ -1,3 +1,4 @@
+import 'package:admin_loja_virtual/blocs/orders_bloc.dart';
 import 'package:admin_loja_virtual/blocs/user_bloc.dart';
 import 'package:admin_loja_virtual/tabs/orders_tab.dart';
 import 'package:admin_loja_virtual/tabs/users_tab.dart';
@@ -44,6 +45,7 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   UserBloc _userBloc;
+  OrdersBloc _ordersBloc;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -59,6 +61,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void initState() {
     super.initState();
     _userBloc = UserBloc();
+    _ordersBloc = OrdersBloc();
   }
 
   void _onItemTapped(int index) {
@@ -74,8 +77,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       body: SafeArea(
         child: BlocProvider<UserBloc>(
           bloc: _userBloc,
-          child: Center(
-            child: _widgetOptions.elementAt(_selectedIndex),
+          child: BlocProvider<OrdersBloc>(
+            bloc: _ordersBloc,
+            child: Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            ),
           ),
         ),
       ),

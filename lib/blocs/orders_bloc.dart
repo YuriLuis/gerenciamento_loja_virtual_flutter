@@ -4,14 +4,14 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
-class OrderBloc extends BlocBase {
+class OrdersBloc extends BlocBase {
   final _ordersController = BehaviorSubject<List>();
   Firestore _firestore = Firestore.instance;
   List<DocumentSnapshot> _orders = [];
 
   Stream<List> get outOrders => _ordersController.stream;
 
-  OrderBloc() {
+  OrdersBloc() {
     _addOrdersLister();
   }
 
