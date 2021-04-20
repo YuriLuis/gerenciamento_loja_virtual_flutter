@@ -1,3 +1,4 @@
+import 'package:admin_loja_virtual/screens/product_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -29,16 +30,21 @@ class CategoryTile extends StatelessWidget {
               builder: (context, snapshot) => !snapshot.hasData
                   ? Container()
                   : Column(
-                      children: snapshot.data.documents.map((e){
+                      children: snapshot.data.documents.map((doc){
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(e.data['images'][0]),
+                            backgroundImage: NetworkImage(doc.data['images'][0]),
                             backgroundColor: Colors.transparent,
                           ),
-                          title: Text(e.data['title']),
-                          trailing: Text('R\$${e.data['price'].toStringAsFixed(2)}'),
+                          title: Text(doc.data['title']),
+                          trailing: Text('R\$${doc.data['price'].toStringAsFixed(2)}'),
                           onTap: (){
-
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ProductScreen(
+                                categoryId: category.documentID,
+                                product: doc,
+                              ))
+                            );
                           },
                         );
                       }).toList()..add(
@@ -49,7 +55,11 @@ class CategoryTile extends StatelessWidget {
                           ),
                           title: Text('Adicionar'),
                           onTap: (){
-
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => ProductScreen(
+                                  categoryId: category.documentID,
+                                ))
+                            );
                           },
                         )
                       ),
