@@ -1,4 +1,5 @@
 import 'package:admin_loja_virtual/blocs/products_bloc.dart';
+import 'package:admin_loja_virtual/validators/product_validator.dart';
 import 'package:admin_loja_virtual/widgets/images_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class ProductScreen extends StatefulWidget {
   _ProductScreenState createState() => _ProductScreenState(categoryId, product);
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenState extends State<ProductScreen> with ProductValidator{
   final ProductBloc _productBloc;
   final _formKey = GlobalKey<FormState>();
 
@@ -45,7 +46,11 @@ class _ProductScreenState extends State<ProductScreen> {
         title: Text('Criar Produto'),
         actions: [
           IconButton(icon: Icon(Icons.remove), onPressed: () {}),
-          IconButton(icon: Icon(Icons.save), onPressed: () {})
+          IconButton(icon: Icon(Icons.save), onPressed: () {
+            if(_formKey.currentState.validate()){
+              _formKey.currentState.save();
+            }
+          })
         ],
       ),
       body: Form(
@@ -62,21 +67,17 @@ class _ProductScreenState extends State<ProductScreen> {
                   Text('Imagens', style: TextStyle(color: Colors.white, fontSize: 12),),
                   ImagesWidget(context: context,
                   initialValue: snapshot.data['images'],
-                  onSaved: (l){
-
-                  },
+                  onSaved: _productBloc.saveImages,
                   // ignore: missing_return
-                  validator: (l){
-
-                  },),
+                  validator: validateImages,),
                   TextFormField(
                     initialValue: snapshot.data['title'],
                     cursorColor: Color.fromRGBO(255, 199, 44, 1.0),
                     style: _fieldStyle,
                     decoration: _buildDecoration('titulo'),
-                    onSaved: (text) {},
+                    onSaved: _productBloc.saveTitle,
                     // ignore: missing_return
-                    validator: (text) {},
+                    validator: validateTitle,
                   ),
                   TextFormField(
                     initialValue: snapshot.data['description'],
@@ -84,9 +85,9 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: _fieldStyle,
                     maxLines: 6,
                     decoration: _buildDecoration('Descrição'),
-                    onSaved: (text) {},
+                    onSaved: _productBloc.saveDescription,
                     // ignore: missing_return
-                    validator: (text) {},
+                    validator: validateDescription,
                   ),
                   TextFormField(
                     initialValue: snapshot.data['price']?.toStringAsFixed(2),
@@ -94,9 +95,9 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: _fieldStyle,
                     decoration: _buildDecoration('Preço'),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    onSaved: (text) {},
+                    onSaved: _productBloc.savePrice,
                     // ignore: missing_return
-                    validator: (text) {},
+                    validator: validatePrice,
                   )
                 ],
               );
