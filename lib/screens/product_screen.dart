@@ -1,4 +1,5 @@
 import 'package:admin_loja_virtual/blocs/products_bloc.dart';
+import 'package:admin_loja_virtual/widgets/images_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -58,6 +59,8 @@ class _ProductScreenState extends State<ProductScreen> {
               return ListView(
                 padding: EdgeInsets.all(16),
                 children: [
+                  Text('Imagens', style: TextStyle(color: Colors.white, fontSize: 12),),
+                  ImagesWidget(),
                   TextFormField(
                     initialValue: snapshot.data['title'],
                     cursorColor: Color.fromRGBO(255, 199, 44, 1.0),
