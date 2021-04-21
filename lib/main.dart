@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gerenciamento Loja Virtual',
       theme: ThemeData(
-        primaryColor:  Color.fromRGBO(255, 199, 44,1.0)
+        primaryColor:  Color.fromRGBO(255, 199, 44,1.0),
       ),
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
