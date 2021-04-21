@@ -60,7 +60,15 @@ class _ProductScreenState extends State<ProductScreen> {
                 padding: EdgeInsets.all(16),
                 children: [
                   Text('Imagens', style: TextStyle(color: Colors.white, fontSize: 12),),
-                  ImagesWidget(),
+                  ImagesWidget(context: context,
+                  initialValue: snapshot.data['images'],
+                  onSaved: (l){
+
+                  },
+                  // ignore: missing_return
+                  validator: (l){
+
+                  },),
                   TextFormField(
                     initialValue: snapshot.data['title'],
                     cursorColor: Color.fromRGBO(255, 199, 44, 1.0),
