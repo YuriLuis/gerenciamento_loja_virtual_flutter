@@ -88,7 +88,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       floatingActionButton: _buildFloating(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
-        items: const <BottomNavigationBarItem>[
+        items:<BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Clientes',

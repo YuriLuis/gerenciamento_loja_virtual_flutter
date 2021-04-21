@@ -44,9 +44,36 @@ class _ProductScreenState extends State<ProductScreen> with ProductValidator {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
         elevation: 0,
-        title: Text('Criar Produto'),
+        title: StreamBuilder<bool>(
+          stream: _productBloc.outCreated,
+          initialData: false,
+          builder: (context, snapshot) {
+            return Text(snapshot.data ?  'Editar Produto ': 'Criar Produto');
+          }
+        ),
         actions: [
-          IconButton(icon: Icon(Icons.remove), onPressed: () {}),
+          StreamBuilder<bool>(
+            stream: _productBloc.outCreated,
+            initialData: false,
+            // ignore: missing_return
+            builder: (context, snapshot){
+              if(snapshot.data){
+                return StreamBuilder<bool>(
+                    stream: _productBloc.outLoading,
+                    initialData: false,
+                    builder: (context, snapshot) {
+                      return IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: snapshot.data ? null : (){
+                            _productBloc.deleteProduct();
+                            Navigator.of(context).pop();
+                          });
+                    });
+              }else{
+                return Container();
+              }
+            },
+          ),
           StreamBuilder<bool>(
               stream: _productBloc.outLoading,
               initialData: false,
@@ -156,6 +183,8 @@ class _ProductScreenState extends State<ProductScreen> with ProductValidator {
         ),
         backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
       ));
+
+      Navigator.of(context).pop();
     }
   }
 }

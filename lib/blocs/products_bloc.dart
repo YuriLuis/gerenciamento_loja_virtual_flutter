@@ -20,6 +20,7 @@ class ProductBloc extends BlocBase {
       unsavedData = Map.of(product.data);
       unsavedData['images'] = List.of(product.data['images']);
       unsavedData['sizes'] = List.of(product.data['sizes']);
+      _createdController.add(true);
     }else {
       unsavedData = {
         'title' : null,
@@ -28,6 +29,8 @@ class ProductBloc extends BlocBase {
         'images' : [],
         'sizes' : []
       };
+
+      _createdController.add(false);
     }
     _dataController.add(unsavedData);
   }
@@ -50,6 +53,8 @@ class ProductBloc extends BlocBase {
   @override
   void dispose() {
     _dataController.close();
+    _loadingController.close();
+    _createdController.close();
   }
 
   Future<bool> saveProduct() async {
@@ -61,7 +66,7 @@ class ProductBloc extends BlocBase {
         await product.reference.updateData(unsavedData);
       } else {
         DocumentReference dr = await Firestore.instance.collection("products").document(categoryId).
-        collection("items").add(Map.from(unsavedData)..remove("images"));
+        collection("itens").add(Map.from(unsavedData)..remove("images"));
         await _uploadImages(dr.documentID);
         await dr.updateData(unsavedData);
       }
@@ -73,6 +78,10 @@ class ProductBloc extends BlocBase {
       _loadingController.add(false);
       return false;
     }
+  }
+
+  void deleteProduct(){
+    product.reference.delete();
   }
 
   Future _uploadImages(String productId) async {

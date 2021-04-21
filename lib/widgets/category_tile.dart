@@ -6,6 +6,7 @@ class CategoryTile extends StatelessWidget {
   final DocumentSnapshot category;
 
   CategoryTile(this.category);
+  String _primeiraImagem = '';
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +26,18 @@ class CategoryTile extends StatelessWidget {
                 TextStyle(color: Colors.grey[850], fontWeight: FontWeight.w500),
           ),
           children: [
-            FutureBuilder<QuerySnapshot>(
-              future: category.reference.collection('itens').getDocuments(),
+            StreamBuilder<QuerySnapshot>(
+              stream: category.reference.collection('itens').snapshots(),
               builder: (context, snapshot) => !snapshot.hasData
                   ? Container()
                   : Column(
                       children: snapshot.data.documents.map((doc){
+                        if(_primeiraImagem.isEmpty){
+                          _primeiraImagem = doc.data['images'][0];
+                        }
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(doc.data['images'][0]),
+                            backgroundImage: NetworkImage(_primeiraImagem),
                             backgroundColor: Colors.transparent,
                           ),
                           title: Text(doc.data['title']),

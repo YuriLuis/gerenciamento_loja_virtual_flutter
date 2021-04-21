@@ -24,5 +24,5 @@ class _ProdutctTabState extends State<ProdutctTab> with AutomaticKeepAliveClient
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }
