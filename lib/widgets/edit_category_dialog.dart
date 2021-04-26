@@ -87,7 +87,8 @@ class _EditCategotyDialogState extends State<EditCategotyDialog> {
                       }
                       return FlatButton(
                         onPressed: snapshot.data ? () {
-
+                           _categoryBloc.delete();
+                          Navigator.of(context).pop();
                         } : null,
                         child: Text('Excluir'),
                         textColor: Colors.red,
@@ -98,7 +99,10 @@ class _EditCategotyDialogState extends State<EditCategotyDialog> {
                   stream: _categoryBloc.submitValid,
                   builder: (context, snapshot) {
                     return FlatButton(
-                      onPressed: snapshot.hasData ? (){} : null,
+                      onPressed: snapshot.hasData ? () async{
+                        await _categoryBloc.saveData();
+                        Navigator.of(context).pop();
+                      } : null,
                       child: Text('Salvar'),
                     );
                   }
