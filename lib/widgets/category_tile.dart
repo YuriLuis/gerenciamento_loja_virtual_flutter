@@ -33,6 +33,10 @@ class CategoryTile extends StatelessWidget {
                   : Column(
                       children: snapshot.data.documents.map((doc){
                         if(_primeiraImagem.isEmpty){
+                          _primeiraImagem = "";
+                          _primeiraImagem = doc.data['images'][0];
+                        }else {
+                          _primeiraImagem = "";
                           _primeiraImagem = doc.data['images'][0];
                         }
                         return ListTile(

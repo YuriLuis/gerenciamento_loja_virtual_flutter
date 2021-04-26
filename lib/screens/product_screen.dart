@@ -1,6 +1,7 @@
 import 'package:admin_loja_virtual/blocs/products_bloc.dart';
 import 'package:admin_loja_virtual/validators/product_validator.dart';
 import 'package:admin_loja_virtual/widgets/images_widget.dart';
+import 'package:admin_loja_virtual/widgets/product_sizes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -137,7 +138,22 @@ class _ProductScreenState extends State<ProductScreen> with ProductValidator {
                           onSaved: _productBloc.savePrice,
                           // ignore: missing_return
                           validator: validatePrice,
-                        )
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          'Tamanhos',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        ProductSizes(initialValue: snapshot.data['sizes'],
+                        onSaved: (s){
+
+                        },
+                        // ignore: missing_return
+                        validator: (s){
+
+                        },)
                       ],
                     );
                   }

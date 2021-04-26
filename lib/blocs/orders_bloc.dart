@@ -39,7 +39,7 @@ class OrdersBloc extends BlocBase {
             break;
         }
       });
-      _sort();
+     _sort();
     });
   }
 

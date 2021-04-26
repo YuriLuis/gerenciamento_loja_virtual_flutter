@@ -32,7 +32,6 @@ class OrdersTab extends StatelessWidget {
                 itemCount: snapshot.data.length,
               );
             }
-
           }),
     );
   }
