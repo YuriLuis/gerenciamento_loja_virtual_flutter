@@ -3,6 +3,7 @@ import 'package:admin_loja_virtual/blocs/user_bloc.dart';
 import 'package:admin_loja_virtual/tabs/orders_tab.dart';
 import 'package:admin_loja_virtual/tabs/product_tab.dart';
 import 'package:admin_loja_virtual/tabs/users_tab.dart';
+import 'package:admin_loja_virtual/widgets/edit_category_dialog.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 
 /// Flutter code sample for BottomNavigationBar
@@ -45,7 +46,6 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-
   UserBloc _userBloc;
   OrdersBloc _ordersBloc;
   int _selectedIndex = 0;
@@ -88,7 +88,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       floatingActionButton: _buildFloating(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
-        items:<BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Clientes',
@@ -111,7 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   // ignore: missing_return
   Widget _buildFloating() {
-    switch(_selectedIndex){
+    switch (_selectedIndex) {
       case 0:
         return null;
         break;
@@ -123,24 +123,39 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           overlayColor: Colors.black,
           children: [
             SpeedDialChild(
-              child: Icon(Icons.arrow_downward, color: Theme.of(context).primaryColor,),
-              backgroundColor: Colors.black,
-              label:  'Concluídos Abaixo',
-              labelStyle: TextStyle(fontSize: 14),
-              onTap: (){
-                _ordersBloc.setOrderCriteria(SortCriteria.READY_LAST);
-              }
-            ),
-            SpeedDialChild(
-                child: Icon(Icons.arrow_upward, color: Theme.of(context).primaryColor,),
+                child: Icon(
+                  Icons.arrow_downward,
+                  color: Theme.of(context).primaryColor,
+                ),
                 backgroundColor: Colors.black,
-                label:  'Concluídos Acima',
+                label: 'Concluídos Abaixo',
                 labelStyle: TextStyle(fontSize: 14),
-                onTap: (){
+                onTap: () {
+                  _ordersBloc.setOrderCriteria(SortCriteria.READY_LAST);
+                }),
+            SpeedDialChild(
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: Theme.of(context).primaryColor,
+                ),
+                backgroundColor: Colors.black,
+                label: 'Concluídos Acima',
+                labelStyle: TextStyle(fontSize: 14),
+                onTap: () {
                   _ordersBloc.setOrderCriteria(SortCriteria.READY_FIRST);
-                }
-            )
+                })
           ],
+        );
+      case 2:
+        return FloatingActionButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) => EditCategotyDialog(
+                    ));
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Color.fromRGBO(255, 199, 44, 1.0),
         );
         break;
     }
