@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +12,24 @@ class CategoryBloc extends BlocBase{
   final _imageController = BehaviorSubject();
   final _deleteController = BehaviorSubject<bool>();
 
-  Stream<String> get outTitle => _titleController.stream;
+  Stream<String> get outTitle => _titleController.stream.transform(
+    StreamTransformer<String, String>.fromHandlers(
+      handleData: (title, sink){
+        if(title.isEmpty){
+          sink.addError('Insira um título');
+        }else {
+          sink.add(title);
+        }
+      }
+    ));
+
   Stream get outImage => _imageController.stream;
   Stream<bool> get outDelete => _deleteController.stream;
+  Stream<bool> get submitValid => Observable.combineLatest2(outTitle, outImage, (a, b) => true);
 
   DocumentSnapshot category;
+  String title;
+  File image;
 
   CategoryBloc({this.category}){
     if(category != null) {
@@ -32,4 +48,14 @@ class CategoryBloc extends BlocBase{
     _deleteController.close();
   }
 
+  void setImage(File file) {
+    image = file;
+    _imageController.add(file);
+  }
+
+
+  void setTitle(String title) {
+    this.title = title;
+    _titleController.add(title);
+  }
 }

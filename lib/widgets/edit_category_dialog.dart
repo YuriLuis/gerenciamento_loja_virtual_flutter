@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:admin_loja_virtual/blocs/category_bloc.dart';
+import 'package:admin_loja_virtual/widgets/image_source_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,14 @@ class _EditCategotyDialogState extends State<EditCategotyDialog> {
           children: [
             ListTile(
               leading: GestureDetector(
+                onTap: (){
+                  showModalBottomSheet(context: context, builder: (context) => ImageSourceSheet(
+                    onImageSelected: (image){
+                      Navigator.of(context).pop();
+                      _categoryBloc.setImage(image);
+                    },
+                  ));
+                },
                 child: StreamBuilder(
                     stream: _categoryBloc.outImage,
                     // ignore: missing_return
@@ -54,8 +63,17 @@ class _EditCategotyDialogState extends State<EditCategotyDialog> {
                     }
                 ),
               ),
-              title: TextField(
-                controller: _controller,
+              title: StreamBuilder<String>(
+                stream: _categoryBloc.outTitle,
+                builder: (context, snapshot) {
+                  return TextField(
+                    controller: _controller,
+                    onChanged: _categoryBloc.setTitle,
+                    decoration: InputDecoration(
+                      errorText: snapshot.hasError ? snapshot.error : null
+                    ),
+                  );
+                }
               ),
             ),
             Row(
@@ -76,11 +94,14 @@ class _EditCategotyDialogState extends State<EditCategotyDialog> {
                       );
                     }
                 ),
-                FlatButton(
-                  onPressed: () {
-
-                  },
-                  child: Text('Salvar'),
+                StreamBuilder<bool>(
+                  stream: _categoryBloc.submitValid,
+                  builder: (context, snapshot) {
+                    return FlatButton(
+                      onPressed: snapshot.hasData ? (){} : null,
+                      child: Text('Salvar'),
+                    );
+                  }
                 )
               ],
             )
